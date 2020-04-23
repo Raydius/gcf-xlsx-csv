@@ -33,6 +33,12 @@ exports.convertSheet = async (event) => {
     console.log(`Processing ${file.name}.`);
 
     try {
+        // ensure file type based on extension
+        const ext = path.extname(file.name);
+        if (ext.toUpperCase() !== '.XLSX') {
+            throw new Error(`Incorrect file type: ${ext}.`);
+        }
+
         // download source file into local temp
         const tempLocalPath = `/tmp/${path.parse(file.name).base}`;
 

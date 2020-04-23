@@ -1,0 +1,22 @@
+{
+  "name": "gcf-xlsx-csv",
+  "version": "1.0.0",
+  "description": "Google Cloud Function to convert XLSX to CSV",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Raydius/gcf-xlsx-csv.git"
+  },
+  "author": "Ray Dollete <ray@raytalkstech.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Raydius/gcf-xlsx-csv/issues"
+  },
+  "homepage": "https://github.com/Raydius/gcf-xlsx-csv#readme",
+  "dependencies": {
+    "@google-cloud/storage": "^4.7.0"
+  }
+}

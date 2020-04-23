@@ -12,6 +12,7 @@
 const fs = require('fs');
 const {promisify} = require('util');
 const path = require('path');
+const xlsx = require('xlsx');
 
 // instantiate Google Cloud Storage object
 const {Storage} = require('@google-cloud/storage');
@@ -20,7 +21,7 @@ const storage = new Storage();
 // get destination bucket from ENV
 const {CSV_BUCKET_NAME} = process.env;
 
-// main conversion function
+// triggered conversion event
 exports.convertSheet = async (event) => {
     
     // the event represents the triggering Cloud Storage object
@@ -51,14 +52,18 @@ exports.convertSheet = async (event) => {
         }
 
         // process file (should just copy with nothing here)
-
+        const workBook = xlsx.readFile(tempLocalPath);
+        const csvPath = replaceExt(tempLocalPath, '.csv');
+        const csvFile = replaceExt(file.name, '.csv');
+        xlsx.writeFile(workBook, csvPath, { bookType: "csv" });
+        
         // create destination bucket object
         const csvBucket = storage.bucket(CSV_BUCKET_NAME);
 
         // upload new file into the bucket
-        const gcsPath = `gs://${CSV_BUCKET_NAME}/${file.name}`;
+        const gcsPath = `gs://${CSV_BUCKET_NAME}/${file.name}.csv`;
         try {
-            await csvBucket.upload(tempLocalPath, {destination: file.name});
+            await csvBucket.upload(csvPath, {destination: csvFile });
             console.log(`Uploaded CSV to: ${gcsPath}`);
         }
         catch (err) {
@@ -75,3 +80,18 @@ exports.convertSheet = async (event) => {
     }
 
 };
+
+// replace path/file extensions
+const replaceExt = (npath, ext) => {
+    if (typeof npath !== 'string') {
+      return npath;
+    }
+  
+    if (npath.length === 0) {
+      return npath;
+    }
+  
+    var nFileName = path.basename(npath, path.extname(npath)) + ext;
+    return path.join(path.dirname(npath), nFileName);
+};
+  

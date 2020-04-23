@@ -63,8 +63,9 @@ exports.convertSheet = async (event) => {
         // upload new file into the bucket
         const gcsPath = `gs://${CSV_BUCKET_NAME}/${file.name}.csv`;
         try {
-            await csvBucket.upload(csvPath, {destination: csvFile });
+            await csvBucket.upload(csvPath, {destination: csvFile, resumable: false });
             console.log(`Uploaded CSV to: ${gcsPath}`);
+            fs.unlink(csvPath);
         }
         catch (err) {
             throw new Error(`Unable to upload CSV to ${gcsPath}: ${err}`);

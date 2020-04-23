@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "Google Cloud Function to convert XLSX to CSV",
   "main": "index.js",
+  "engines": {
+    "node": ">=10.0.0"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -18,5 +21,13 @@
   "homepage": "https://github.com/Raydius/gcf-xlsx-csv#readme",
   "dependencies": {
     "@google-cloud/storage": "^4.7.0"
+  },
+  "cloud-repo-tools": {
+    "requiresKeyFile": true,
+    "requiresProjectId": true,
+    "requiredEnvVars": [
+      "FUNCTIONS_BUCKET",
+      "CSV_BUCKET_NAME"
+    ]
   }
 }

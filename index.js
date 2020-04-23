@@ -4,7 +4,7 @@
  * This function is designed to be triggered by Cloud Storage events
  * and read from one bucket and write to another
  * 
- * @author Ray Dollete <ray@raytalkstech.com>
+ * @author Ray Dollete
  */
 
 'use strict';

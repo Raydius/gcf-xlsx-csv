@@ -61,25 +61,28 @@ exports.convertSheet = async (event) => {
         const csvBucket = storage.bucket(CSV_BUCKET_NAME);
 
         // upload new file into the bucket
-        const gcsPath = `gs://${CSV_BUCKET_NAME}/${file.name}.csv`;
+        const gcsPath = `gs://${CSV_BUCKET_NAME}/${file.name}`;
         try {
-            await csvBucket.upload(csvPath, {destination: csvFile, resumable: false });
-            console.log(`Uploaded CSV to: ${gcsPath}`);
-            fs.unlink(csvPath);
+            const options = {
+                destination: csvFile,
+                resumable: false
+            };
+            await csvBucket.upload(csvPath, options);
+            console.log(`Uploaded CSV to: ${gcsPath}`);              
         }
         catch (err) {
             throw new Error(`Unable to upload CSV to ${gcsPath}: ${err}`);
         }
-
-        // Delete temp file
-        const unlink = promisify(fs.unlink);
-        return unlink(tempLocalPath);
+        fs.unlink(csvPath);          
     } 
     catch (err) {
         console.error(`Failed to process ${file.name}.`, err);
         throw err;
     }
 
+    // Delete temp file
+    const unlink = promisify(fs.unlink);
+    return unlink(tempLocalPath);
 };
 
 // replace path/file extensions
